@@ -1,3 +1,4 @@
+import { emitEnvelopeEvent } from "./api/webhooks.ts";
 import { randomUUID } from "node:crypto";
 
 import { type Branding } from "./branding.ts";
@@ -3507,6 +3508,8 @@ export async function voidSentEnvelope(
       }
     }),
   );
+
+  emitEnvelopeEvent(envelopeId, "envelope.voided");
 
   return voidEnvelopeResponseSchema.parse({
     envelopeId,

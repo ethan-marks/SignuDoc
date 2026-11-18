@@ -1,3 +1,4 @@
+import { emitEnvelopeEvent } from "./api/webhooks.ts";
 import { Buffer } from "node:buffer";
 import { randomUUID } from "node:crypto";
 
@@ -2916,6 +2917,8 @@ export async function submitSigningForToken(
       throw error;
     }
 
+    emitEnvelopeEvent(context.envelope.id, "envelope.completed");
+
     try {
       await sendCompletionEmails({
         attachments: {
@@ -3275,6 +3278,8 @@ export async function declineSigningForToken(
 
     throw error;
   });
+
+  emitEnvelopeEvent(context.envelope.id, "envelope.declined");
 
   try {
     const delivery = await emailService.send(
